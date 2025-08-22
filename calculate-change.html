@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculate Change</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background-color: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #007acc;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      background-color: #007acc;
+      color: white;
+      cursor: pointer;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    button:hover {
+      background-color: #005f99;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: center;
+      color: #333;
+    }
+
+    .coin {
+      margin: 5px 0;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Calculate Change</h2>
+    <input type="number" id="amount" placeholder="Enter amount in ฿">
+    <button onclick="calculateChange()">Submit</button>
+    <button onclick="goBack()">Back</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function calculateChange() {
+      const amountInput = document.getElementById("amount").value.trim();
+      const resultBox = document.getElementById("result");
+      let amount = parseInt(amountInput);
+
+      if (isNaN(amount) || amount <= 0) {
+        resultBox.innerHTML = "<span class='error'>❌ Please enter a valid amount greater than 0.</span>";
+        return;
+      }
+
+      const denominations = [500, 100, 50, 20, 1];
+      let resultHTML = "<strong>Change Breakdown:</strong><br>";
+
+      for (let baht of denominations) {
+        const count = Math.floor(amount / baht);
+        if (count > 0) {
+          resultHTML += `<div class="coin">${count} of ฿${baht}</div>`;
+          amount %= baht;
+        }
+      }
+
+      resultBox.innerHTML = resultHTML;
+    }
+
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+
+</body>
+</html>

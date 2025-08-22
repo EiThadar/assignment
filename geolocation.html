@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Geolocation Distance</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e0f7fa;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background-color: #ffffff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    button {
+      background-color: #00796b;
+      color: white;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #004d40;
+    }
+
+    #output {
+      margin-top: 30px;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Geolocation Distance</h2>
+    <p>Click the button to find out how far you are from Kasem Bundit University.</p>
+    <button onclick="findDistance()">Where am I?</button>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    const uniLat = 13.805392901238022;
+    const uniLon = 100.73962177144537;
+
+    function findDistance() {
+      const output = document.getElementById("output");
+
+      if (!navigator.geolocation) {
+        output.innerHTML = "<span class='error'>Geolocation is not supported by your browser.</span>";
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(success, error);
+
+      function success(position) {
+        const userLat = position.coords.latitude;
+        const userLon = position.coords.longitude;
+
+        const distance = getDistanceFromLatLonInKm(userLat, userLon, uniLat, uniLon).toFixed(2);
+
+        output.innerHTML = `You're <strong>${distance} km</strong> away from Kasem Bundit University.`;
+      }
+
+      function error() {
+        output.innerHTML = "<span class='error'>Unable to retrieve your location.</span>";
+      }
+    }
+
+    // Haversine Formula to calculate distance between two lat/lon points
+    function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+      const R = 6371; // Radius of the Earth in km
+      const dLat = deg2rad(lat2 - lat1);
+      const dLon = deg2rad(lon2 - lon1);
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    function deg2rad(deg) {
+      return deg * (Math.PI / 180);
+    }
+  </script>
+</body>
+</html>
